@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #4A9EFF;
+  --color-dark-blue: #2C5282;
+  --color-light-blue: #E3F2FD;
+
+  --color-domain-ai: #4A9EFF;
+  --color-domain-hr: #FF8C42;
+  --color-domain-marketing: #9B6FFF;
+  --color-domain-sales: #2ECC71;
+  --color-domain-product: #1ABC9C;
+  --color-domain-finance: #2C3E50;
+  --color-domain-leadership: #F39C12;
+  --color-domain-negotiation: #E74C3C;
+  --color-domain-communication: #FF6B9D;
+  --color-domain-culture: #3498DB;
+
+  --color-tier-1: #FFD700;
+  --color-tier-2: #C0C0C0;
+  --color-tier-3: #CD7F32;
+
+  --color-currency-bleeding: #FF4500;
+  --color-currency-recent: #FFD700;
+  --color-currency-modern: #4A9EFF;
+  --color-currency-timeless: #808080;
+
+  --color-dark-bg: #0F1419;
+  --color-dark-surface: #192734;
+  --color-dark-text: #E7E9EA;
+  --color-dark-muted: #71767B;
+  --color-dark-border: #2F3336;
+
+  --color-light-bg: #FFFFFF;
+  --color-light-surface: #F7F9FA;
+  --color-light-text: #0F1419;
+  --color-light-muted: #536471;
+  --color-light-border: #EFF3F4;
+
+  --font-display: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-body: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+@layer base {
+  :root {
+    --bg: var(--color-light-bg);
+    --surface: var(--color-light-surface);
+    --text: var(--color-light-text);
+    --muted: var(--color-light-muted);
+    --border: var(--color-light-border);
+  }
+
+  .dark {
+    --bg: var(--color-dark-bg);
+    --surface: var(--color-dark-surface);
+    --text: var(--color-dark-text);
+    --muted: var(--color-dark-muted);
+    --border: var(--color-dark-border);
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted) transparent;
+  }
+}
+
+@layer utilities {
+  .glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--muted);
+  border-radius: 3px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px currentColor; }
+  50% { box-shadow: 0 0 20px currentColor; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
