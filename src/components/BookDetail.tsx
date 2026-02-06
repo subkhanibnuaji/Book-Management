@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Book } from "@/data/books";
 import {
   DOMAIN_COLORS,
@@ -57,22 +57,33 @@ export default function BookDetail({
     { key: "notes" as const, label: "My Notes" },
   ];
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-4 sm:py-8 px-4">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 transition-opacity"
         onClick={onClose}
-        aria-label="Close detail view"
+        role="presentation"
       />
 
       {/* Modal */}
       <div
         className="relative w-full max-w-3xl rounded-2xl shadow-2xl animate-slide-up"
         style={{
-          backgroundColor: isDark ? "#192734" : "#FFFFFF",
-          border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+          backgroundColor: "var(--surface-raised)",
+          border: "1px solid var(--border)",
         }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Details for ${book.title}`}
       >
         {/* Top accent */}
         <div className="h-1.5 rounded-t-2xl" style={{ backgroundColor: domainColor }} />
@@ -82,8 +93,8 @@ export default function BookDetail({
           onClick={onClose}
           className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full transition-colors z-10"
           style={{
-            backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
-            color: isDark ? "#E7E9EA" : "#0F1419",
+            backgroundColor: "var(--surface)",
+            color: "var(--text)",
           }}
           aria-label="Close"
         >
@@ -123,8 +134,8 @@ export default function BookDetail({
               <span
                 className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
                 style={{
-                  backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
-                  color: isDark ? "#A0A8B0" : "#536471",
+                  backgroundColor: "var(--surface)",
+                  color: "var(--text-content)",
                 }}
               >
                 {book.aiRelevance}
@@ -133,21 +144,21 @@ export default function BookDetail({
 
             <h2
               className="text-2xl sm:text-3xl font-bold mb-2"
-              style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}
+              style={{ color: "var(--text)" }}
             >
               {book.title}
             </h2>
 
             <p
               className="text-base mb-2"
-              style={{ color: isDark ? "#A0A8B0" : "#536471" }}
+              style={{ color: "var(--text-content)" }}
             >
               by {book.authors.join(", ")}
             </p>
 
             <div
               className="flex flex-wrap items-center gap-3 text-sm"
-              style={{ color: isDark ? "#71767B" : "#536471" }}
+              style={{ color: "var(--text-secondary)" }}
             >
               <span>{book.year}{book.updatedYear ? ` (Updated ${book.updatedYear})` : ""}{book.month ? `, ${book.month}` : ""}</span>
               <span>·</span>
@@ -163,13 +174,13 @@ export default function BookDetail({
                   <span
                     key={i}
                     className="text-lg"
-                    style={{ color: "#FFD700", opacity: i < book.authority.score ? 1 : 0.2 }}
+                    style={{ color: "var(--star)", opacity: i < book.authority.score ? 1 : 0.2 }}
                   >
                     ★
                   </span>
                 ))}
               </div>
-              <span className="text-sm" style={{ color: isDark ? "#71767B" : "#536471" }}>
+              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
                 Authority Score · {book.authority.status}
               </span>
             </div>
@@ -177,13 +188,13 @@ export default function BookDetail({
             {/* Ratings */}
             <div className="flex flex-wrap gap-4 mt-2">
               {book.ratings.goodreads && (
-                <span className="text-sm" style={{ color: isDark ? "#A0A8B0" : "#536471" }}>
+                <span className="text-sm" style={{ color: "var(--text-content)" }}>
                   Goodreads: {book.ratings.goodreads}★
                   {book.ratings.goodreadsReviews && ` (${book.ratings.goodreadsReviews.toLocaleString()} reviews)`}
                 </span>
               )}
               {book.ratings.amazon && (
-                <span className="text-sm" style={{ color: isDark ? "#A0A8B0" : "#536471" }}>
+                <span className="text-sm" style={{ color: "var(--text-content)" }}>
                   Amazon: {book.ratings.amazon}★
                 </span>
               )}
@@ -194,12 +205,12 @@ export default function BookDetail({
           <div
             className="flex flex-wrap gap-4 p-4 rounded-xl mb-6"
             style={{
-              backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
-              border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+              backgroundColor: "var(--surface)",
+              border: "1px solid var(--border)",
             }}
           >
             <div className="flex-1 min-w-[180px]">
-              <label className="text-xs font-medium block mb-1.5" style={{ color: isDark ? "#71767B" : "#536471" }}>
+              <label className="text-xs font-medium block mb-1.5" style={{ color: "var(--text-secondary)" }}>
                 Reading Status
               </label>
               <select
@@ -207,9 +218,9 @@ export default function BookDetail({
                 onChange={(e) => onStatusChange(book.id, e.target.value as ReadingStatus)}
                 className="w-full px-3 py-2 rounded-lg text-sm font-medium cursor-pointer"
                 style={{
-                  backgroundColor: isDark ? "#192734" : "#FFFFFF",
-                  color: isDark ? "#E7E9EA" : "#0F1419",
-                  border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+                  backgroundColor: "var(--surface-raised)",
+                  color: "var(--text)",
+                  border: "1px solid var(--border)",
                 }}
               >
                 <option value="Not Started">☐ Not Started</option>
@@ -218,7 +229,7 @@ export default function BookDetail({
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium block mb-1.5" style={{ color: isDark ? "#71767B" : "#536471" }}>
+              <label className="text-xs font-medium block mb-1.5" style={{ color: "var(--text-secondary)" }}>
                 My Rating
               </label>
               <div className="flex gap-1">
@@ -227,7 +238,7 @@ export default function BookDetail({
                     key={star}
                     onClick={() => onRatingChange(book.id, star)}
                     className="text-xl transition-transform hover:scale-125"
-                    style={{ color: star <= (userRating || 0) ? "#FFD700" : isDark ? "#2F3336" : "#D1D5DB" }}
+                    style={{ color: star <= (userRating || 0) ? "var(--star)" : "var(--star-inactive)" }}
                     aria-label={`Rate ${star} stars`}
                   >
                     ★
@@ -240,7 +251,7 @@ export default function BookDetail({
           {/* Tabs */}
           <div
             className="flex border-b mb-6"
-            style={{ borderColor: isDark ? "#2F3336" : "#EFF3F4" }}
+            style={{ borderColor: "var(--border)" }}
           >
             {tabs.map((tab) => (
               <button
@@ -248,7 +259,7 @@ export default function BookDetail({
                 onClick={() => setActiveTab(tab.key)}
                 className="px-4 py-2.5 text-sm font-medium transition-all relative"
                 style={{
-                  color: activeTab === tab.key ? "#4A9EFF" : isDark ? "#71767B" : "#536471",
+                  color: activeTab === tab.key ? "var(--accent)" : "var(--text-secondary)",
                 }}
               >
                 {tab.label}
@@ -265,22 +276,22 @@ export default function BookDetail({
               <div className="space-y-6 animate-fade-in">
                 {/* Summary */}
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Summary
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: isDark ? "#A0A8B0" : "#4A5568" }}>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-content)" }}>
                     {book.content.summary}
                   </p>
                 </div>
 
                 {/* Key Takeaways */}
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Key Takeaways
                   </h3>
                   <ul className="space-y-1.5">
                     {book.content.keyTakeaways.map((point, i) => (
-                      <li key={i} className="flex gap-2 text-sm" style={{ color: isDark ? "#A0A8B0" : "#4A5568" }}>
+                      <li key={i} className="flex gap-2 text-sm" style={{ color: "var(--text-content)" }}>
                         <span style={{ color: domainColor }}>→</span>
                         {point}
                       </li>
@@ -290,17 +301,17 @@ export default function BookDetail({
 
                 {/* Why World-Class */}
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Why World-Class
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: isDark ? "#A0A8B0" : "#4A5568" }}>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-content)" }}>
                     {book.content.whyWorldClass}
                   </p>
                 </div>
 
                 {/* Best For */}
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Best For
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -309,9 +320,9 @@ export default function BookDetail({
                         key={i}
                         className="px-3 py-1 rounded-full text-xs font-medium"
                         style={{
-                          backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
-                          color: isDark ? "#A0A8B0" : "#536471",
-                          border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+                          backgroundColor: "var(--surface)",
+                          color: "var(--text-content)",
+                          border: "1px solid var(--border)",
                         }}
                       >
                         {audience}
@@ -322,12 +333,12 @@ export default function BookDetail({
 
                 {/* Limitations */}
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Limitations
                   </h3>
                   <ul className="space-y-1">
                     {book.content.limitations.map((limit, i) => (
-                      <li key={i} className="text-sm" style={{ color: isDark ? "#71767B" : "#718096" }}>
+                      <li key={i} className="text-sm" style={{ color: "var(--text-tertiary)" }}>
                         • {limit}
                       </li>
                     ))}
@@ -339,31 +350,31 @@ export default function BookDetail({
             {activeTab === "details" && (
               <div className="space-y-6 animate-fade-in">
                 <div className="grid grid-cols-2 gap-4">
-                  <DetailItem label="Publisher" value={book.publisher} isDark={isDark} />
-                  <DetailItem label="Year" value={`${book.year}${book.updatedYear ? ` (Updated ${book.updatedYear})` : ""}`} isDark={isDark} />
-                  <DetailItem label="Pages" value={`${book.pages}`} isDark={isDark} />
-                  <DetailItem label="AI Relevance" value={book.aiRelevance} isDark={isDark} />
+                  <DetailItem label="Publisher" value={book.publisher} />
+                  <DetailItem label="Year" value={`${book.year}${book.updatedYear ? ` (Updated ${book.updatedYear})` : ""}`} />
+                  <DetailItem label="Pages" value={`${book.pages}`} />
+                  <DetailItem label="AI Relevance" value={book.aiRelevance} />
                 </div>
 
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Authority Credentials
                   </h3>
-                  <p className="text-sm" style={{ color: isDark ? "#A0A8B0" : "#4A5568" }}>
+                  <p className="text-sm" style={{ color: "var(--text-content)" }}>
                     {book.authority.credentials}
                   </p>
-                  <p className="text-sm mt-1" style={{ color: isDark ? "#71767B" : "#718096" }}>
+                  <p className="text-sm mt-1" style={{ color: "var(--text-tertiary)" }}>
                     {book.authority.validation}
                   </p>
                   {book.authority.citations && (
-                    <p className="text-sm mt-1" style={{ color: isDark ? "#71767B" : "#718096" }}>
+                    <p className="text-sm mt-1" style={{ color: "var(--text-tertiary)" }}>
                       Citations: {book.authority.citations.toLocaleString()}+
                     </p>
                   )}
                 </div>
 
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Domains & Tags
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -384,12 +395,12 @@ export default function BookDetail({
 
                 {book.freeResources && book.freeResources.length > 0 && (
                   <div>
-                    <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                    <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                       Free Resources
                     </h3>
                     <ul className="space-y-1">
                       {book.freeResources.map((res, i) => (
-                        <li key={i} className="text-sm" style={{ color: "#4A9EFF" }}>
+                        <li key={i} className="text-sm" style={{ color: "var(--accent)" }}>
                           → {res}
                         </li>
                       ))}
@@ -403,13 +414,13 @@ export default function BookDetail({
               <div className="space-y-6 animate-fade-in">
                 {/* Integration Notes */}
                 <div>
-                  <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                  <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                     Integration Notes
                   </h3>
                   <ul className="space-y-2">
                     {book.integrationNotes.map((note, i) => (
-                      <li key={i} className="flex gap-2 text-sm" style={{ color: isDark ? "#A0A8B0" : "#4A5568" }}>
-                        <span style={{ color: "#4A9EFF" }}>💡</span>
+                      <li key={i} className="flex gap-2 text-sm" style={{ color: "var(--text-content)" }}>
+                        <span style={{ color: "var(--accent)" }}>💡</span>
                         {note}
                       </li>
                     ))}
@@ -419,7 +430,7 @@ export default function BookDetail({
                 {/* Reading Pathways */}
                 {book.readingPathways.length > 0 && (
                   <div>
-                    <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                    <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                       Appears in Pathways
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -428,9 +439,9 @@ export default function BookDetail({
                           key={i}
                           className="px-3 py-1.5 rounded-lg text-xs font-medium"
                           style={{
-                            backgroundColor: "#4A9EFF18",
-                            color: "#4A9EFF",
-                            border: "1px solid #4A9EFF33",
+                            backgroundColor: "var(--accent-bg)",
+                            color: "var(--accent)",
+                            border: "1px solid var(--accent-border)",
                           }}
                         >
                           🎯 {pathway}
@@ -443,7 +454,7 @@ export default function BookDetail({
                 {/* Cross-Domain */}
                 {book.crossDomainApplications && book.crossDomainApplications.length > 0 && (
                   <div>
-                    <h3 className="font-semibold mb-2" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                    <h3 className="font-semibold mb-2" style={{ color: "var(--text)" }}>
                       Cross-Domain Applications
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -466,7 +477,7 @@ export default function BookDetail({
                 {/* Related Books */}
                 {relatedBooks.length > 0 && (
                   <div>
-                    <h3 className="font-semibold mb-3" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+                    <h3 className="font-semibold mb-3" style={{ color: "var(--text)" }}>
                       Related Books
                     </h3>
                     <div className="space-y-2">
@@ -476,14 +487,14 @@ export default function BookDetail({
                           onClick={() => onSelectBook(rb)}
                           className="w-full text-left p-3 rounded-lg transition-colors hover:opacity-80"
                           style={{
-                            backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
-                            border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+                            backgroundColor: "var(--surface)",
+                            border: "1px solid var(--border)",
                           }}
                         >
-                          <span className="font-medium text-sm" style={{ color: "#4A9EFF" }}>
+                          <span className="font-medium text-sm" style={{ color: "var(--accent)" }}>
                             {rb.title}
                           </span>
-                          <span className="text-xs block" style={{ color: isDark ? "#71767B" : "#536471" }}>
+                          <span className="text-xs block" style={{ color: "var(--text-secondary)" }}>
                             {rb.authors.join(", ")} · {rb.year}
                           </span>
                         </button>
@@ -504,12 +515,12 @@ export default function BookDetail({
                   rows={8}
                   className="w-full p-4 rounded-xl text-sm resize-none"
                   style={{
-                    backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
-                    color: isDark ? "#E7E9EA" : "#0F1419",
-                    border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+                    backgroundColor: "var(--surface)",
+                    color: "var(--text)",
+                    border: "1px solid var(--border)",
                   }}
                 />
-                <p className="text-xs" style={{ color: isDark ? "#71767B" : "#536471" }}>
+                <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
                   Notes are saved automatically when you click outside the text area.
                 </p>
               </div>
@@ -524,23 +535,21 @@ export default function BookDetail({
 function DetailItem({
   label,
   value,
-  isDark,
 }: {
   label: string;
   value: string;
-  isDark: boolean;
 }) {
   return (
     <div
       className="p-3 rounded-lg"
       style={{
-        backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
+        backgroundColor: "var(--surface)",
       }}
     >
-      <span className="text-xs block" style={{ color: isDark ? "#71767B" : "#536471" }}>
+      <span className="text-xs block" style={{ color: "var(--text-secondary)" }}>
         {label}
       </span>
-      <span className="text-sm font-medium" style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}>
+      <span className="text-sm font-medium" style={{ color: "var(--text)" }}>
         {value}
       </span>
     </div>

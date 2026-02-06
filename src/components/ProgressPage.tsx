@@ -22,12 +22,6 @@ export default function ProgressPage({
   onSelectBook,
   onNavigate,
 }: ProgressPageProps) {
-  const text = isDark ? "#E7E9EA" : "#0F1419";
-  const muted = isDark ? "#71767B" : "#536471";
-  const surface = isDark ? "#192734" : "#FFFFFF";
-  const border = isDark ? "#2F3336" : "#EFF3F4";
-  const bg2 = isDark ? "#0F1419" : "#F7F9FA";
-
   const completedBooks = books.filter(
     (b) => userData.books[b.id]?.status === "Completed"
   );
@@ -106,10 +100,10 @@ export default function ProgressPage({
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: text }}>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: "var(--text)" }}>
             📊 My Progress
           </h1>
-          <p className="text-base" style={{ color: muted }}>
+          <p className="text-base" style={{ color: "var(--text-secondary)" }}>
             Track your reading journey across the library
           </p>
         </div>
@@ -117,9 +111,9 @@ export default function ProgressPage({
           onClick={handleExport}
           className="px-4 py-2 rounded-lg text-sm font-medium"
           style={{
-            backgroundColor: surface,
-            color: text,
-            border: `1px solid ${border}`,
+            backgroundColor: "var(--surface-raised)",
+            color: "var(--text)",
+            border: "1px solid var(--border)",
           }}
         >
           📥 Export CSV
@@ -127,120 +121,108 @@ export default function ProgressPage({
       </div>
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+      <section className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
         <StatCard
           number={completedBooks.length}
           label="Completed"
-          color="#2ECC71"
-          isDark={isDark}
-          surface={surface}
-          border={border}
+          color="var(--success)"
         />
         <StatCard
           number={inProgressBooks.length}
           label="In Progress"
-          color="#F39C12"
-          isDark={isDark}
-          surface={surface}
-          border={border}
+          color="var(--warning)"
         />
         <StatCard
           number={books.length - totalTracked + Object.values(userData.books).filter(b => b.status === "Not Started").length}
           label="Not Started"
-          color={muted}
-          isDark={isDark}
-          surface={surface}
-          border={border}
+          color="var(--text-secondary)"
         />
         <StatCard
           number={books.length}
           label="Total Library"
-          color="#4A9EFF"
-          isDark={isDark}
-          surface={surface}
-          border={border}
+          color="var(--accent)"
         />
-      </div>
+      </section>
 
       {/* Overall Progress */}
-      <div
+      <section
         className="p-6 rounded-2xl mb-10"
-        style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+        style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
       >
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-bold" style={{ color: text }}>
+          <h3 className="font-bold" style={{ color: "var(--text)" }}>
             Overall Progress
           </h3>
-          <span className="text-sm font-medium" style={{ color: "#4A9EFF" }}>
+          <span className="text-sm font-medium" style={{ color: "var(--accent)" }}>
             {Math.round(overallPct)}%
           </span>
         </div>
-        <div className="h-4 rounded-full overflow-hidden" style={{ backgroundColor: bg2 }}>
+        <div className="h-4 rounded-full overflow-hidden" style={{ backgroundColor: "var(--surface)" }}>
           <div
             className="h-full rounded-full transition-all duration-700"
-            style={{ width: `${overallPct}%`, backgroundColor: "#4A9EFF" }}
+            style={{ width: `${overallPct}%`, backgroundColor: "var(--accent)" }}
           />
         </div>
-        <p className="text-xs mt-2" style={{ color: muted }}>
+        <p className="text-xs mt-2" style={{ color: "var(--text-secondary)" }}>
           {completedBooks.length} of {books.length} books completed
         </p>
-      </div>
+      </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Domain Progress */}
-        <div
+        <section
           className="p-6 rounded-2xl"
-          style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+          style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
         >
-          <h3 className="font-bold mb-4" style={{ color: text }}>
+          <h3 className="font-bold mb-4" style={{ color: "var(--text)" }}>
             Progress by Domain
           </h3>
           <div className="space-y-4">
             {domainStats.map((ds) => (
               <div key={ds.category}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium" style={{ color: text }}>
+                  <span className="text-sm font-medium" style={{ color: "var(--text)" }}>
                     {DOMAIN_LABELS[ds.category] || ds.category}
                   </span>
-                  <span className="text-xs" style={{ color: muted }}>
+                  <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
                     {ds.completed}/{ds.total}
                   </span>
                 </div>
-                <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: bg2 }}>
+                <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--surface)" }}>
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
                       width: `${ds.pct}%`,
-                      backgroundColor: DOMAIN_COLORS[ds.category] || "#4A9EFF",
+                      backgroundColor: DOMAIN_COLORS[ds.category] || "var(--accent)",
                     }}
                   />
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Tier Progress */}
         <div className="space-y-8">
-          <div
+          <section
             className="p-6 rounded-2xl"
-            style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+            style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
           >
-            <h3 className="font-bold mb-4" style={{ color: text }}>
+            <h3 className="font-bold mb-4" style={{ color: "var(--text)" }}>
               Progress by Tier
             </h3>
             <div className="space-y-4">
               {tierStats.map((ts) => (
                 <div key={ts.tier}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium" style={{ color: text }}>
+                    <span className="text-sm font-medium" style={{ color: "var(--text)" }}>
                       Tier {ts.tier} — {["", "Essential", "Recommended", "Specialized"][ts.tier]}
                     </span>
-                    <span className="text-xs" style={{ color: muted }}>
+                    <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
                       {ts.completed}/{ts.total}
                     </span>
                   </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: bg2 }}>
+                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--surface)" }}>
                     <div
                       className="h-full rounded-full transition-all"
                       style={{
@@ -252,134 +234,134 @@ export default function ProgressPage({
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
           {/* Active Pathway */}
           {activePathway && pathwayProgress && (
-            <div
+            <section
               className="p-6 rounded-2xl"
-              style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+              style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
             >
-              <h3 className="font-bold mb-2" style={{ color: text }}>
+              <h3 className="font-bold mb-2" style={{ color: "var(--text)" }}>
                 Active Pathway
               </h3>
-              <p className="text-sm mb-3" style={{ color: muted }}>
+              <p className="text-sm mb-3" style={{ color: "var(--text-secondary)" }}>
                 {activePathway.icon} {activePathway.name}
               </p>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs" style={{ color: muted }}>
+                <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
                   {pathwayProgress.completed}/{pathwayProgress.total} books
                 </span>
-                <span className="text-xs font-medium" style={{ color: "#4A9EFF" }}>
+                <span className="text-xs font-medium" style={{ color: "var(--accent)" }}>
                   {Math.round(
                     (pathwayProgress.completed / pathwayProgress.total) * 100
                   )}
                   %
                 </span>
               </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: bg2 }}>
+              <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--surface)" }}>
                 <div
                   className="h-full rounded-full"
                   style={{
                     width: `${
                       (pathwayProgress.completed / pathwayProgress.total) * 100
                     }%`,
-                    backgroundColor: "#4A9EFF",
+                    backgroundColor: "var(--accent)",
                   }}
                 />
               </div>
               <button
                 onClick={() => onNavigate("pathways")}
                 className="mt-3 text-xs font-medium"
-                style={{ color: "#4A9EFF" }}
+                style={{ color: "var(--accent)" }}
               >
                 View Pathway Details →
               </button>
-            </div>
+            </section>
           )}
         </div>
       </div>
 
       {/* Currently Reading */}
       {inProgressBooks.length > 0 && (
-        <div className="mt-10">
-          <h3 className="text-xl font-bold mb-4" style={{ color: text }}>
+        <section className="mt-10">
+          <h3 className="text-xl font-bold mb-4" style={{ color: "var(--text)" }}>
             📖 Currently Reading
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {inProgressBooks.map((book) => (
-              <div
+              <article
                 key={book.id}
                 className="p-4 rounded-xl cursor-pointer hover:opacity-90 transition-all"
                 style={{
-                  backgroundColor: surface,
-                  border: `1px solid ${border}`,
+                  backgroundColor: "var(--surface-raised)",
+                  border: "1px solid var(--border)",
                 }}
                 onClick={() => onSelectBook(book)}
               >
                 <div
                   className="h-1 rounded-full mb-3"
-                  style={{ backgroundColor: DOMAIN_COLORS[book.category] || "#4A9EFF" }}
+                  style={{ backgroundColor: DOMAIN_COLORS[book.category] || "var(--accent)" }}
                 />
-                <h4 className="font-semibold text-sm mb-1" style={{ color: text }}>
+                <h4 className="font-semibold text-sm mb-1" style={{ color: "var(--text)" }}>
                   {book.title}
                 </h4>
-                <p className="text-xs" style={{ color: muted }}>
+                <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
                   {book.authors.join(", ")} · Started{" "}
                   {userData.books[book.id]?.startDate || "recently"}
                 </p>
-              </div>
+              </article>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Recently Completed */}
       {recentCompleted.length > 0 && (
-        <div className="mt-10">
-          <h3 className="text-xl font-bold mb-4" style={{ color: text }}>
+        <section className="mt-10">
+          <h3 className="text-xl font-bold mb-4" style={{ color: "var(--text)" }}>
             ✅ Recently Completed
           </h3>
           <div className="space-y-2">
             {recentCompleted.map((book) => (
-              <div
+              <article
                 key={book.id}
                 className="flex items-center gap-4 p-3 rounded-xl cursor-pointer hover:opacity-90"
                 style={{
-                  backgroundColor: surface,
-                  border: `1px solid ${border}`,
+                  backgroundColor: "var(--surface-raised)",
+                  border: "1px solid var(--border)",
                 }}
                 onClick={() => onSelectBook(book)}
               >
                 <span className="text-lg">✅</span>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-sm truncate" style={{ color: text }}>
+                  <h4 className="font-semibold text-sm truncate" style={{ color: "var(--text)" }}>
                     {book.title}
                   </h4>
-                  <p className="text-xs" style={{ color: muted }}>
+                  <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
                     {book.authors.join(", ")}
                   </p>
                 </div>
-                <span className="text-xs shrink-0" style={{ color: muted }}>
+                <span className="text-xs shrink-0" style={{ color: "var(--text-secondary)" }}>
                   {userData.books[book.id]?.finishDate}
                 </span>
-              </div>
+              </article>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Empty state */}
       {completedBooks.length === 0 && inProgressBooks.length === 0 && (
-        <div
+        <section
           className="text-center py-16 rounded-2xl mt-10"
-          style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+          style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
         >
           <p className="text-5xl mb-4">📚</p>
-          <h3 className="text-xl font-bold mb-2" style={{ color: text }}>
+          <h3 className="text-xl font-bold mb-2" style={{ color: "var(--text)" }}>
             Start Your Reading Journey
           </h3>
-          <p className="text-sm mb-6 max-w-md mx-auto" style={{ color: muted }}>
+          <p className="text-sm mb-6 max-w-md mx-auto" style={{ color: "var(--text-secondary)" }}>
             Browse the library and start marking books as &quot;In Progress&quot; or
             &quot;Completed&quot; to track your progress here.
           </p>
@@ -387,7 +369,7 @@ export default function ProgressPage({
             <button
               onClick={() => onNavigate("browse")}
               className="px-6 py-2.5 rounded-lg font-medium text-white"
-              style={{ backgroundColor: "#4A9EFF" }}
+              style={{ backgroundColor: "var(--accent)" }}
             >
               Browse Library
             </button>
@@ -395,15 +377,15 @@ export default function ProgressPage({
               onClick={() => onNavigate("pathways")}
               className="px-6 py-2.5 rounded-lg font-medium"
               style={{
-                color: "#4A9EFF",
-                border: "2px solid #4A9EFF",
+                color: "var(--accent)",
+                border: "2px solid var(--accent)",
                 backgroundColor: "transparent",
               }}
             >
               Start a Pathway
             </button>
           </div>
-        </div>
+        </section>
       )}
     </div>
   );
@@ -413,28 +395,22 @@ function StatCard({
   number,
   label,
   color,
-  isDark,
-  surface,
-  border,
 }: {
   number: number;
   label: string;
   color: string;
-  isDark: boolean;
-  surface: string;
-  border: string;
 }) {
   return (
     <div
       className="p-5 rounded-xl text-center"
-      style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+      style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
     >
       <p className="text-3xl font-extrabold mb-1" style={{ color }}>
         {number}
       </p>
       <p
         className="text-xs font-medium"
-        style={{ color: isDark ? "#71767B" : "#536471" }}
+        style={{ color: "var(--text-secondary)" }}
       >
         {label}
       </p>

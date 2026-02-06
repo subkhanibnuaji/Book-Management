@@ -29,12 +29,6 @@ export default function PathwaysPage({
     userData.activePathway || null
   );
 
-  const text = isDark ? "#E7E9EA" : "#0F1419";
-  const muted = isDark ? "#71767B" : "#536471";
-  const surface = isDark ? "#192734" : "#FFFFFF";
-  const border = isDark ? "#2F3336" : "#EFF3F4";
-  const bg2 = isDark ? "#0F1419" : "#F7F9FA";
-
   const activePathway = pathways.find((p) => p.id === selectedPathway);
 
   const getPathwayProgress = (pathway: ReadingPathway) => {
@@ -48,16 +42,16 @@ export default function PathwaysPage({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: text }}>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: "var(--text)" }}>
           🎯 Reading Pathways
         </h1>
-        <p className="text-base" style={{ color: muted }}>
+        <p className="text-base" style={{ color: "var(--text-secondary)" }}>
           Structured reading programs designed for different goals and timelines
         </p>
       </div>
 
       {/* Pathway Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
         {pathways.map((pathway) => {
           const { completed, total } = getPathwayProgress(pathway);
           const pct = total > 0 ? (completed / total) * 100 : 0;
@@ -73,20 +67,20 @@ export default function PathwaysPage({
                 isActive ? "ring-2 ring-[#4A9EFF]" : ""
               }`}
               style={{
-                backgroundColor: surface,
-                border: `1px solid ${isActive ? "#4A9EFF" : border}`,
+                backgroundColor: "var(--surface-raised)",
+                border: `1px solid ${isActive ? "var(--accent)" : "var(--border)"}`,
               }}
             >
               <div className="flex items-start gap-4">
                 <span className="text-3xl">{pathway.icon}</span>
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg mb-1" style={{ color: text }}>
+                  <h3 className="font-bold text-lg mb-1" style={{ color: "var(--text)" }}>
                     {pathway.name}
                   </h3>
-                  <p className="text-sm font-medium mb-2" style={{ color: "#4A9EFF" }}>
+                  <p className="text-sm font-medium mb-2" style={{ color: "var(--accent)" }}>
                     {pathway.duration}
                   </p>
-                  <p className="text-sm mb-4" style={{ color: muted }}>
+                  <p className="text-sm mb-4" style={{ color: "var(--text-secondary)" }}>
                     {pathway.description}
                   </p>
 
@@ -97,9 +91,9 @@ export default function PathwaysPage({
                         key={i}
                         className="px-2 py-0.5 rounded-full text-xs"
                         style={{
-                          backgroundColor: bg2,
-                          color: muted,
-                          border: `1px solid ${border}`,
+                          backgroundColor: "var(--surface)",
+                          color: "var(--text-secondary)",
+                          border: "1px solid var(--border)",
                         }}
                       >
                         {audience}
@@ -110,26 +104,26 @@ export default function PathwaysPage({
                   {/* Progress */}
                   <div className="mb-2">
                     <div className="flex justify-between text-xs mb-1">
-                      <span style={{ color: muted }}>
+                      <span style={{ color: "var(--text-secondary)" }}>
                         {completed}/{total} books completed
                       </span>
-                      <span style={{ color: "#4A9EFF" }}>{Math.round(pct)}%</span>
+                      <span style={{ color: "var(--accent)" }}>{Math.round(pct)}%</span>
                     </div>
                     <div
                       className="h-2 rounded-full overflow-hidden"
-                      style={{ backgroundColor: bg2 }}
+                      style={{ backgroundColor: "var(--surface)" }}
                     >
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{
                           width: `${pct}%`,
-                          backgroundColor: "#4A9EFF",
+                          backgroundColor: "var(--accent)",
                         }}
                       />
                     </div>
                   </div>
 
-                  <p className="text-xs" style={{ color: muted }}>
+                  <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
                     {pathway.phases.length} phases · {total} books total
                   </p>
                 </div>
@@ -137,20 +131,20 @@ export default function PathwaysPage({
             </button>
           );
         })}
-      </div>
+      </section>
 
       {/* Selected Pathway Details */}
       {activePathway && (
-        <div className="animate-fade-in">
+        <section className="animate-fade-in">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold" style={{ color: text }}>
+            <h2 className="text-2xl font-bold" style={{ color: "var(--text)" }}>
               {activePathway.icon} {activePathway.name}
             </h2>
             {userData.activePathway !== activePathway.id ? (
               <button
                 onClick={() => onSetActivePathway(activePathway.id)}
                 className="px-6 py-2.5 rounded-lg font-medium text-white"
-                style={{ backgroundColor: "#4A9EFF" }}
+                style={{ backgroundColor: "var(--accent)" }}
               >
                 Set as Active Pathway
               </button>
@@ -158,9 +152,9 @@ export default function PathwaysPage({
               <span
                 className="px-4 py-2 rounded-lg text-sm font-medium"
                 style={{
-                  backgroundColor: "#2ECC7122",
-                  color: "#2ECC71",
-                  border: "1px solid #2ECC7144",
+                  backgroundColor: "var(--success-bg)",
+                  color: "var(--success)",
+                  border: "1px solid var(--success-border)",
                 }}
               >
                 ✓ Active Pathway
@@ -168,7 +162,7 @@ export default function PathwaysPage({
             )}
           </div>
 
-          <p className="text-sm mb-2" style={{ color: muted }}>
+          <p className="text-sm mb-2" style={{ color: "var(--text-secondary)" }}>
             {activePathway.result}
           </p>
 
@@ -184,23 +178,23 @@ export default function PathwaysPage({
                   : 0;
 
               return (
-                <div key={phaseIdx}>
+                <section key={phaseIdx}>
                   {/* Phase header */}
                   <div className="flex items-center gap-4 mb-4">
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
                       style={{
-                        backgroundColor: phasePct === 100 ? "#2ECC71" : "#4A9EFF",
+                        backgroundColor: phasePct === 100 ? "var(--success)" : "var(--accent)",
                         color: "#FFFFFF",
                       }}
                     >
                       {phasePct === 100 ? "✓" : phaseIdx + 1}
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-bold" style={{ color: text }}>
+                      <h3 className="font-bold" style={{ color: "var(--text)" }}>
                         {phase.name}
                       </h3>
-                      <p className="text-xs" style={{ color: muted }}>
+                      <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
                         {phase.duration} · {phaseCompleted}/{phase.books.length}{" "}
                         complete
                       </p>
@@ -208,14 +202,14 @@ export default function PathwaysPage({
                     <div className="w-24">
                       <div
                         className="h-2 rounded-full overflow-hidden"
-                        style={{ backgroundColor: bg2 }}
+                        style={{ backgroundColor: "var(--surface)" }}
                       >
                         <div
                           className="h-full rounded-full transition-all"
                           style={{
                             width: `${phasePct}%`,
                             backgroundColor:
-                              phasePct === 100 ? "#2ECC71" : "#4A9EFF",
+                              phasePct === 100 ? "var(--success)" : "var(--accent)",
                           }}
                         />
                       </div>
@@ -223,7 +217,7 @@ export default function PathwaysPage({
                   </div>
 
                   {/* Books in phase */}
-                  <div className="ml-5 pl-8 space-y-3" style={{ borderLeft: `2px solid ${border}` }}>
+                  <div className="ml-5 pl-8 space-y-3" style={{ borderLeft: "2px solid var(--border)" }}>
                     {phase.books.map((pb) => {
                       const book = books.find((b) => b.id === pb.bookId);
                       if (!book) return null;
@@ -232,12 +226,12 @@ export default function PathwaysPage({
                         "Not Started";
 
                       return (
-                        <div
+                        <article
                           key={pb.bookId}
                           className="flex items-center gap-4 p-3 rounded-xl transition-colors hover:opacity-90 cursor-pointer"
                           style={{
-                            backgroundColor: surface,
-                            border: `1px solid ${border}`,
+                            backgroundColor: "var(--surface-raised)",
+                            border: "1px solid var(--border)",
                           }}
                           onClick={() => onSelectBook(book)}
                         >
@@ -247,16 +241,16 @@ export default function PathwaysPage({
                             style={{
                               backgroundColor:
                                 status === "Completed"
-                                  ? "#2ECC7122"
+                                  ? "var(--success-bg)"
                                   : status === "In Progress"
-                                  ? "#F39C1222"
-                                  : bg2,
+                                  ? "var(--warning-bg)"
+                                  : "var(--surface)",
                               color:
                                 status === "Completed"
-                                  ? "#2ECC71"
+                                  ? "var(--success)"
                                   : status === "In Progress"
-                                  ? "#F39C12"
-                                  : muted,
+                                  ? "var(--warning)"
+                                  : "var(--text-secondary)",
                             }}
                           >
                             {status === "Completed"
@@ -269,11 +263,11 @@ export default function PathwaysPage({
                           <div className="flex-1 min-w-0">
                             <h4
                               className="font-semibold text-sm truncate"
-                              style={{ color: text }}
+                              style={{ color: "var(--text)" }}
                             >
                               {book.title}
                             </h4>
-                            <p className="text-xs" style={{ color: muted }}>
+                            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
                               {book.authors.join(", ")} · {book.year}
                               {pb.note && ` · ${pb.note}`}
                             </p>
@@ -291,24 +285,24 @@ export default function PathwaysPage({
                             onClick={(e) => e.stopPropagation()}
                             className="text-xs px-2 py-1 rounded cursor-pointer shrink-0"
                             style={{
-                              backgroundColor: bg2,
-                              color: text,
-                              border: `1px solid ${border}`,
+                              backgroundColor: "var(--surface)",
+                              color: "var(--text)",
+                              border: "1px solid var(--border)",
                             }}
                           >
                             <option value="Not Started">Not Started</option>
                             <option value="In Progress">In Progress</option>
                             <option value="Completed">Completed</option>
                           </select>
-                        </div>
+                        </article>
                       );
                     })}
                   </div>
-                </div>
+                </section>
               );
             })}
           </div>
-        </div>
+        </section>
       )}
     </div>
   );
