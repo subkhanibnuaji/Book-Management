@@ -69,7 +69,7 @@ export default function LibraryApp() {
   return (
     <div
       className="min-h-screen transition-colors duration-300"
-      style={{ backgroundColor: isDark ? "#0F1419" : "#FFFFFF" }}
+      style={{ backgroundColor: "var(--bg)" }}
     >
       <Navigation
         currentPage={currentPage}
@@ -79,7 +79,7 @@ export default function LibraryApp() {
         bookCount={books.length}
       />
 
-      <main>
+      <main id="main-content">
         {currentPage === "home" && (
           <HomePage
             books={books}
@@ -146,15 +146,15 @@ export default function LibraryApp() {
       <footer
         className="border-t py-8 mt-16"
         style={{
-          borderColor: isDark ? "#2F3336" : "#EFF3F4",
-          backgroundColor: isDark ? "#0F1419" : "#FFFFFF",
+          borderColor: "var(--border)",
+          backgroundColor: "var(--bg)",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm" style={{ color: isDark ? "#71767B" : "#536471" }}>
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
             📚 Ibnu&apos;s World-Class Business Library · Curated January 2026
           </p>
-          <p className="text-xs mt-1" style={{ color: isDark ? "#536471" : "#71767B" }}>
+          <p className="text-xs mt-1" style={{ color: "var(--text-tertiary)" }}>
             {books.length} books · 10 domains · 4 reading pathways
           </p>
         </div>

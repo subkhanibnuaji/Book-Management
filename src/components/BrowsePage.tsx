@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Book } from "@/data/books";
 import { ReadingStatus, Category } from "@/lib/constants";
 import { UserData } from "@/lib/store";
+import { useDebounce } from "@/hooks/useDebounce";
 import BookCard from "./BookCard";
 import FilterPanel, { Filters, defaultFilters } from "./FilterPanel";
 
@@ -118,24 +119,26 @@ export default function BrowsePage({
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const filteredBooks = useMemo(
-    () => applyFilters(books, filters, userData),
-    [books, filters, userData]
-  );
+  const debouncedSearch = useDebounce(filters.search, 300);
 
-  const text = isDark ? "#E7E9EA" : "#0F1419";
-  const muted = isDark ? "#71767B" : "#536471";
-  const surface = isDark ? "#192734" : "#FFFFFF";
-  const border = isDark ? "#2F3336" : "#EFF3F4";
+  const filteredBooks = useMemo(
+    () => applyFilters(books, { ...filters, search: debouncedSearch }, userData),
+    [books, filters, debouncedSearch, userData]
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: text }}>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: "var(--text)" }}>
           Browse All Books
         </h1>
-        <p className="text-base" style={{ color: muted }}>
+        <p
+          className="text-base"
+          style={{ color: "var(--text-secondary)" }}
+          role="status"
+          aria-live="polite"
+        >
           {filteredBooks.length} of {books.length} books
           {filters.search && ` matching "${filters.search}"`}
         </p>
@@ -148,7 +151,6 @@ export default function BrowsePage({
             filters={filters}
             onChange={setFilters}
             books={books}
-            isDark={isDark}
             showMobile={false}
             onCloseMobile={() => {}}
           />
@@ -159,7 +161,6 @@ export default function BrowsePage({
           filters={filters}
           onChange={setFilters}
           books={books}
-          isDark={isDark}
           showMobile={showMobileFilters}
           onCloseMobile={() => setShowMobileFilters(false)}
         />
@@ -177,9 +178,9 @@ export default function BrowsePage({
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 className="w-full px-4 py-2.5 rounded-lg text-sm"
                 style={{
-                  backgroundColor: surface,
-                  color: text,
-                  border: `1px solid ${border}`,
+                  backgroundColor: "var(--surface-raised)",
+                  color: "var(--text)",
+                  border: "1px solid var(--border)",
                 }}
               />
             </div>
@@ -190,10 +191,11 @@ export default function BrowsePage({
                 onClick={() => setShowMobileFilters(true)}
                 className="lg:hidden px-4 py-2 rounded-lg text-sm font-medium"
                 style={{
-                  backgroundColor: surface,
-                  color: text,
-                  border: `1px solid ${border}`,
+                  backgroundColor: "var(--surface-raised)",
+                  color: "var(--text)",
+                  border: "1px solid var(--border)",
                 }}
+                aria-label="Open filters"
               >
                 Filters
               </button>
@@ -201,15 +203,16 @@ export default function BrowsePage({
               {/* View toggle */}
               <div
                 className="flex rounded-lg overflow-hidden"
-                style={{ border: `1px solid ${border}` }}
+                style={{ border: "1px solid var(--border)" }}
               >
                 <button
                   onClick={() => setViewMode("grid")}
                   className="px-3 py-2 text-sm transition-colors"
                   style={{
-                    backgroundColor: viewMode === "grid" ? "#4A9EFF" : surface,
-                    color: viewMode === "grid" ? "#FFFFFF" : muted,
+                    backgroundColor: viewMode === "grid" ? "var(--accent)" : "var(--surface-raised)",
+                    color: viewMode === "grid" ? "#FFFFFF" : "var(--text-secondary)",
                   }}
+                  aria-label="Grid view"
                 >
                   ▦
                 </button>
@@ -217,9 +220,10 @@ export default function BrowsePage({
                   onClick={() => setViewMode("list")}
                   className="px-3 py-2 text-sm transition-colors"
                   style={{
-                    backgroundColor: viewMode === "list" ? "#4A9EFF" : surface,
-                    color: viewMode === "list" ? "#FFFFFF" : muted,
+                    backgroundColor: viewMode === "list" ? "var(--accent)" : "var(--surface-raised)",
+                    color: viewMode === "list" ? "#FFFFFF" : "var(--text-secondary)",
                   }}
+                  aria-label="List view"
                 >
                   ☰
                 </button>
@@ -243,7 +247,6 @@ export default function BrowsePage({
                       categories: filters.categories.filter((c) => c !== cat),
                     })
                   }
-                  isDark={isDark}
                 />
               ))}
               {filters.tiers.map((t) => (
@@ -256,7 +259,6 @@ export default function BrowsePage({
                       tiers: filters.tiers.filter((x) => x !== t),
                     })
                   }
-                  isDark={isDark}
                 />
               ))}
               {filters.currency.map((c) => (
@@ -269,7 +271,6 @@ export default function BrowsePage({
                       currency: filters.currency.filter((x) => x !== c),
                     })
                   }
-                  isDark={isDark}
                 />
               ))}
               {filters.aiRelevance.map((r) => (
@@ -282,13 +283,12 @@ export default function BrowsePage({
                       aiRelevance: filters.aiRelevance.filter((x) => x !== r),
                     })
                   }
-                  isDark={isDark}
                 />
               ))}
               <button
                 onClick={() => setFilters(defaultFilters)}
                 className="text-xs px-2 py-1 rounded"
-                style={{ color: "#E74C3C" }}
+                style={{ color: "var(--danger)" }}
               >
                 Clear All
               </button>
@@ -299,19 +299,19 @@ export default function BrowsePage({
           {filteredBooks.length === 0 ? (
             <div
               className="text-center py-16 rounded-xl"
-              style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+              style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
             >
               <p className="text-4xl mb-4">📚</p>
-              <p className="text-lg font-medium mb-2" style={{ color: text }}>
+              <p className="text-lg font-medium mb-2" style={{ color: "var(--text)" }}>
                 No books match your filters
               </p>
-              <p className="text-sm mb-4" style={{ color: muted }}>
+              <p className="text-sm mb-4" style={{ color: "var(--text-secondary)" }}>
                 Try adjusting your search or filter criteria
               </p>
               <button
                 onClick={() => setFilters(defaultFilters)}
                 className="px-4 py-2 rounded-lg text-sm font-medium"
-                style={{ backgroundColor: "#4A9EFF", color: "#FFFFFF" }}
+                style={{ backgroundColor: "var(--accent)", color: "#FFFFFF" }}
               >
                 Reset Filters
               </button>
@@ -337,7 +337,6 @@ export default function BrowsePage({
                 <ListBookRow
                   key={book.id}
                   book={book}
-                  isDark={isDark}
                   status={(userData.books[book.id]?.status as ReadingStatus) || "Not Started"}
                   onSelect={() => onSelectBook(book)}
                   onStatusChange={onStatusChange}
@@ -354,19 +353,17 @@ export default function BrowsePage({
 function FilterTag({
   label,
   onRemove,
-  isDark,
 }: {
   label: string;
   onRemove: () => void;
-  isDark: boolean;
 }) {
   return (
     <span
       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium"
       style={{
-        backgroundColor: "#4A9EFF18",
-        color: "#4A9EFF",
-        border: "1px solid #4A9EFF33",
+        backgroundColor: "var(--accent-bg)",
+        color: "var(--accent)",
+        border: "1px solid var(--accent-border)",
       }}
     >
       {label}
@@ -379,41 +376,34 @@ function FilterTag({
 
 function ListBookRow({
   book,
-  isDark,
   status,
   onSelect,
   onStatusChange,
 }: {
   book: Book;
-  isDark: boolean;
   status: ReadingStatus;
   onSelect: () => void;
   onStatusChange: (bookId: string, status: ReadingStatus) => void;
 }) {
-  const surface = isDark ? "#192734" : "#FFFFFF";
-  const border = isDark ? "#2F3336" : "#EFF3F4";
-  const text = isDark ? "#E7E9EA" : "#0F1419";
-  const muted = isDark ? "#71767B" : "#536471";
-
   return (
     <div
       className="flex items-center gap-4 p-4 rounded-xl cursor-pointer hover:opacity-90 transition-all"
-      style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+      style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
       onClick={onSelect}
     >
       <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-sm truncate" style={{ color: text }}>
+        <h3 className="font-semibold text-sm truncate" style={{ color: "var(--text)" }}>
           {book.title}
         </h3>
-        <p className="text-xs" style={{ color: muted }}>
+        <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
           {book.authors.join(", ")} · {book.year} · {book.pages}p
         </p>
       </div>
       <div className="hidden sm:flex items-center gap-2">
-        <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: "#FFD700" }}>
+        <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: "var(--star)" }}>
           Tier {book.tier}
         </span>
-        <span className="text-xs" style={{ color: muted }}>
+        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
           {book.category}
         </span>
       </div>
@@ -426,9 +416,9 @@ function ListBookRow({
         onClick={(e) => e.stopPropagation()}
         className="text-xs px-2 py-1 rounded cursor-pointer"
         style={{
-          backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
-          color: text,
-          border: `1px solid ${border}`,
+          backgroundColor: "var(--surface)",
+          color: "var(--text)",
+          border: "1px solid var(--border)",
         }}
       >
         <option value="Not Started">Not Started</option>

@@ -29,7 +29,6 @@ interface FilterPanelProps {
   filters: Filters;
   onChange: (filters: Filters) => void;
   books: Book[];
-  isDark: boolean;
   showMobile: boolean;
   onCloseMobile: () => void;
 }
@@ -38,16 +37,9 @@ export default function FilterPanel({
   filters,
   onChange,
   books,
-  isDark,
   showMobile,
   onCloseMobile,
 }: FilterPanelProps) {
-  const bg = isDark ? "#192734" : "#FFFFFF";
-  const surface = isDark ? "#0F1419" : "#F7F9FA";
-  const text = isDark ? "#E7E9EA" : "#0F1419";
-  const muted = isDark ? "#71767B" : "#536471";
-  const border = isDark ? "#2F3336" : "#EFF3F4";
-
   const categoryCounts = CATEGORIES.reduce((acc, cat) => {
     acc[cat] = books.filter((b) => b.category === cat).length;
     return acc;
@@ -101,12 +93,13 @@ export default function FilterPanel({
       )}
 
       <aside
+        aria-label="Filter books"
         className={`${
           showMobile ? "fixed right-0 top-0 bottom-0 w-80 z-50 overflow-y-auto lg:static lg:w-auto" : ""
         } rounded-xl p-5 space-y-5 lg:sticky lg:top-20`}
         style={{
-          backgroundColor: bg,
-          border: `1px solid ${border}`,
+          backgroundColor: "var(--surface-raised)",
+          border: "1px solid var(--border)",
           maxHeight: showMobile ? "100vh" : "calc(100vh - 100px)",
           overflowY: "auto",
         }}
@@ -114,8 +107,8 @@ export default function FilterPanel({
         {/* Mobile close */}
         {showMobile && (
           <div className="flex items-center justify-between lg:hidden mb-2">
-            <h3 className="font-bold" style={{ color: text }}>Filters</h3>
-            <button onClick={onCloseMobile} className="p-2" style={{ color: text }}>✕</button>
+            <h3 className="font-bold" style={{ color: "var(--text)" }}>Filters</h3>
+            <button onClick={onCloseMobile} className="p-2" style={{ color: "var(--text)" }}>✕</button>
           </div>
         )}
 
@@ -127,24 +120,25 @@ export default function FilterPanel({
             value={filters.search}
             onChange={(e) => onChange({ ...filters, search: e.target.value })}
             className="w-full px-4 py-2.5 rounded-lg text-sm"
+            aria-label="Search books"
             style={{
-              backgroundColor: surface,
-              color: text,
-              border: `1px solid ${border}`,
+              backgroundColor: "var(--surface)",
+              color: "var(--text)",
+              border: "1px solid var(--border)",
             }}
           />
         </div>
 
         {/* Sort */}
         <div>
-          <label className="text-xs font-semibold block mb-1.5" style={{ color: muted }}>
+          <label className="text-xs font-semibold block mb-1.5" style={{ color: "var(--text-secondary)" }}>
             Sort By
           </label>
           <select
             value={filters.sortBy}
             onChange={(e) => onChange({ ...filters, sortBy: e.target.value })}
             className="w-full px-3 py-2 rounded-lg text-sm cursor-pointer"
-            style={{ backgroundColor: surface, color: text, border: `1px solid ${border}` }}
+            style={{ backgroundColor: "var(--surface)", color: "var(--text)", border: "1px solid var(--border)" }}
           >
             <option value="tier-asc">Tier (Essential First)</option>
             <option value="year-desc">Year (Newest First)</option>
@@ -157,7 +151,7 @@ export default function FilterPanel({
         </div>
 
         {/* Domain / Category */}
-        <FilterSection title="Domain" isDark={isDark}>
+        <FilterSection title="Domain">
           {CATEGORIES.map((cat) => (
             <label key={cat} className="flex items-center gap-2 cursor-pointer py-1">
               <input
@@ -166,10 +160,10 @@ export default function FilterPanel({
                 onChange={() => toggleCategory(cat)}
                 className="rounded"
               />
-              <span className="text-sm flex-1" style={{ color: text }}>
+              <span className="text-sm flex-1" style={{ color: "var(--text)" }}>
                 {DOMAIN_LABELS[cat] || cat}
               </span>
-              <span className="text-xs" style={{ color: muted }}>
+              <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
                 {categoryCounts[cat] || 0}
               </span>
             </label>
@@ -177,7 +171,7 @@ export default function FilterPanel({
         </FilterSection>
 
         {/* Tier */}
-        <FilterSection title="Tier" isDark={isDark}>
+        <FilterSection title="Tier">
           {[1, 2, 3].map((tier) => (
             <label key={tier} className="flex items-center gap-2 cursor-pointer py-1">
               <input
@@ -186,7 +180,7 @@ export default function FilterPanel({
                 onChange={() => toggleTier(tier)}
                 className="rounded"
               />
-              <span className="text-sm" style={{ color: text }}>
+              <span className="text-sm" style={{ color: "var(--text)" }}>
                 Tier {tier} — {["", "Essential", "Recommended", "Specialized"][tier]}
               </span>
             </label>
@@ -194,7 +188,7 @@ export default function FilterPanel({
         </FilterSection>
 
         {/* Publication Year */}
-        <FilterSection title="Publication Year" isDark={isDark}>
+        <FilterSection title="Publication Year">
           {[
             { key: "all", label: "All Years" },
             { key: "2020+", label: "2020+ (AI Era)" },
@@ -209,13 +203,13 @@ export default function FilterPanel({
                 checked={filters.yearRange === opt.key}
                 onChange={() => onChange({ ...filters, yearRange: opt.key })}
               />
-              <span className="text-sm" style={{ color: text }}>{opt.label}</span>
+              <span className="text-sm" style={{ color: "var(--text)" }}>{opt.label}</span>
             </label>
           ))}
         </FilterSection>
 
         {/* Currency */}
-        <FilterSection title="Currency" isDark={isDark}>
+        <FilterSection title="Currency">
           {["Bleeding Edge", "Recent", "Modern Classic", "Timeless"].map((c) => (
             <label key={c} className="flex items-center gap-2 cursor-pointer py-1">
               <input
@@ -224,7 +218,7 @@ export default function FilterPanel({
                 onChange={() => toggleCurrency(c)}
                 className="rounded"
               />
-              <span className="text-sm" style={{ color: text }}>
+              <span className="text-sm" style={{ color: "var(--text)" }}>
                 {c === "Bleeding Edge" ? "🔥" : c === "Recent" ? "⚡" : c === "Modern Classic" ? "⭐" : "📚"} {c}
               </span>
             </label>
@@ -232,7 +226,7 @@ export default function FilterPanel({
         </FilterSection>
 
         {/* AI Relevance */}
-        <FilterSection title="AI Relevance" isDark={isDark}>
+        <FilterSection title="AI Relevance">
           {AI_RELEVANCE_OPTIONS.map((r) => (
             <label key={r} className="flex items-center gap-2 cursor-pointer py-1">
               <input
@@ -241,13 +235,13 @@ export default function FilterPanel({
                 onChange={() => toggleAiRelevance(r)}
                 className="rounded"
               />
-              <span className="text-sm" style={{ color: text }}>{r}</span>
+              <span className="text-sm" style={{ color: "var(--text)" }}>{r}</span>
             </label>
           ))}
         </FilterSection>
 
         {/* Reading Status */}
-        <FilterSection title="Reading Status" isDark={isDark}>
+        <FilterSection title="Reading Status">
           {[undefined, "Not Started", "In Progress", "Completed"].map((status) => (
             <label key={status || "any"} className="flex items-center gap-2 cursor-pointer py-1">
               <input
@@ -256,7 +250,7 @@ export default function FilterPanel({
                 checked={filters.readingStatus === status}
                 onChange={() => onChange({ ...filters, readingStatus: status as ReadingStatus | undefined })}
               />
-              <span className="text-sm" style={{ color: text }}>{status || "Any Status"}</span>
+              <span className="text-sm" style={{ color: "var(--text)" }}>{status || "Any Status"}</span>
             </label>
           ))}
         </FilterSection>
@@ -267,9 +261,9 @@ export default function FilterPanel({
             onClick={() => onChange(defaultFilters)}
             className="w-full py-2 rounded-lg text-sm font-medium transition-colors"
             style={{
-              backgroundColor: "#E74C3C18",
-              color: "#E74C3C",
-              border: "1px solid #E74C3C33",
+              backgroundColor: "var(--danger-bg)",
+              color: "var(--danger)",
+              border: "1px solid var(--danger-border)",
             }}
           >
             ✕ Reset All Filters
@@ -282,22 +276,20 @@ export default function FilterPanel({
 
 function FilterSection({
   title,
-  isDark,
   children,
 }: {
   title: string;
-  isDark: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <h4
+    <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+      <legend
         className="text-xs font-semibold uppercase tracking-wider mb-2"
-        style={{ color: isDark ? "#71767B" : "#536471" }}
+        style={{ color: "var(--text-secondary)" }}
       >
         {title}
-      </h4>
+      </legend>
       <div className="space-y-0.5">{children}</div>
-    </div>
+    </fieldset>
   );
 }

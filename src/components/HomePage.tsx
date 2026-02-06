@@ -19,12 +19,6 @@ export default function HomePage({
   onNavigate,
   onSelectBook,
 }: HomePageProps) {
-  const text = isDark ? "#E7E9EA" : "#0F1419";
-  const muted = isDark ? "#71767B" : "#536471";
-  const surface = isDark ? "#192734" : "#FFFFFF";
-  const border = isDark ? "#2F3336" : "#EFF3F4";
-  const bg2 = isDark ? "#0F1419" : "#F7F9FA";
-
   const aiBooks = books.filter((b) => b.category === "AI-Era");
   const completedCount = Object.values(userData.books).filter(
     (b) => b.status === "Completed"
@@ -37,25 +31,25 @@ export default function HomePage({
     <div>
       {/* Hero */}
       <section
+        aria-labelledby="hero-heading"
         className="relative overflow-hidden"
         style={{
-          background: isDark
-            ? "linear-gradient(135deg, #0F1419 0%, #192734 50%, #1a2b3d 100%)"
-            : "linear-gradient(135deg, #E3F2FD 0%, #FFFFFF 50%, #F0F4FF 100%)",
+          background: "var(--hero-gradient)",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="text-center max-w-4xl mx-auto">
             <h1
+              id="hero-heading"
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight"
-              style={{ color: text }}
+              style={{ color: "var(--text)" }}
             >
               Your World-Class Business Library{" "}
-              <span style={{ color: "#4A9EFF" }}>for the AI Era</span>
+              <span style={{ color: "var(--accent)" }}>for the AI Era</span>
             </h1>
             <p
               className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto leading-relaxed"
-              style={{ color: muted }}
+              style={{ color: "var(--text-secondary)" }}
             >
               {books.length}+ expertly curated books spanning AI strategy,
               functional expertise, and timeless principles. Build comprehensive
@@ -68,33 +62,21 @@ export default function HomePage({
                 number={aiBooks.length}
                 label="AI-Era Books"
                 sublabel="2020-2025"
-                isDark={isDark}
-                surface={surface}
-                border={border}
               />
               <StatBox
                 number={books.length - aiBooks.length}
                 label="Functional Classics"
                 sublabel="9 Domains"
-                isDark={isDark}
-                surface={surface}
-                border={border}
               />
               <StatBox
                 number={4}
                 label="Reading Pathways"
                 sublabel="Structured"
-                isDark={isDark}
-                surface={surface}
-                border={border}
               />
               <StatBox
                 number={domainCount}
                 label="Business Domains"
                 sublabel="Covered"
-                isDark={isDark}
-                surface={surface}
-                border={border}
               />
             </div>
 
@@ -103,7 +85,7 @@ export default function HomePage({
               <button
                 onClick={() => onNavigate("browse")}
                 className="px-8 py-3.5 rounded-xl font-semibold text-white transition-transform hover:scale-105"
-                style={{ backgroundColor: "#4A9EFF" }}
+                style={{ backgroundColor: "var(--accent)" }}
               >
                 Explore the Library
               </button>
@@ -112,8 +94,8 @@ export default function HomePage({
                 className="px-8 py-3.5 rounded-xl font-semibold transition-transform hover:scale-105"
                 style={{
                   backgroundColor: "transparent",
-                  color: "#4A9EFF",
-                  border: "2px solid #4A9EFF",
+                  color: "var(--accent)",
+                  border: "2px solid var(--accent)",
                 }}
               >
                 Start a Reading Pathway
@@ -124,7 +106,7 @@ export default function HomePage({
 
         {/* Decorative dots */}
         <div className="absolute top-10 right-10 w-40 h-40 opacity-10 rounded-full"
-          style={{ background: "radial-gradient(circle, #4A9EFF, transparent)" }}
+          style={{ background: "radial-gradient(circle, var(--accent), transparent)" }}
         />
         <div className="absolute bottom-10 left-10 w-32 h-32 opacity-10 rounded-full"
           style={{ background: "radial-gradient(circle, #9B6FFF, transparent)" }}
@@ -132,62 +114,62 @@ export default function HomePage({
       </section>
 
       {/* Bleeding Edge Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section aria-labelledby="bleeding-edge-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: text }}>
+            <h2 id="bleeding-edge-heading" className="text-2xl font-bold" style={{ color: "var(--text)" }}>
               🔥 Bleeding Edge ({bleedingEdge.length} books)
             </h2>
-            <p className="text-sm mt-1" style={{ color: muted }}>
+            <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
               Published 2024-2025 — The latest business insights
             </p>
           </div>
           <button
             onClick={() => onNavigate("browse")}
             className="text-sm font-medium"
-            style={{ color: "#4A9EFF" }}
+            style={{ color: "var(--accent)" }}
           >
             View All →
           </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {bleedingEdge.slice(0, 4).map((book) => (
-            <MiniBookCard key={book.id} book={book} isDark={isDark} onClick={() => onSelectBook(book)} />
+            <MiniBookCard key={book.id} book={book} onClick={() => onSelectBook(book)} />
           ))}
         </div>
       </section>
 
       {/* Tier 1 Essential */}
-      <section style={{ backgroundColor: bg2 }}>
+      <section aria-labelledby="tier1-heading" style={{ backgroundColor: "var(--surface)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold" style={{ color: text }}>
+              <h2 id="tier1-heading" className="text-2xl font-bold" style={{ color: "var(--text)" }}>
                 ⭐ Tier 1 — Essential Reading ({tier1Books.length} books)
               </h2>
-              <p className="text-sm mt-1" style={{ color: muted }}>
+              <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
                 The must-read books in every domain
               </p>
             </div>
             <button
               onClick={() => onNavigate("browse")}
               className="text-sm font-medium"
-              style={{ color: "#4A9EFF" }}
+              style={{ color: "var(--accent)" }}
             >
               View All →
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {tier1Books.slice(0, 8).map((book) => (
-              <MiniBookCard key={book.id} book={book} isDark={isDark} onClick={() => onSelectBook(book)} />
+              <MiniBookCard key={book.id} book={book} onClick={() => onSelectBook(book)} />
             ))}
           </div>
         </div>
       </section>
 
       {/* Domain Overview */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-2xl font-bold mb-8" style={{ color: text }}>
+      <section aria-labelledby="domain-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 id="domain-heading" className="text-2xl font-bold mb-8" style={{ color: "var(--text)" }}>
           📂 Browse by Domain
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -200,8 +182,8 @@ export default function HomePage({
                 onClick={() => onNavigate("browse")}
                 className="p-5 rounded-xl text-left transition-transform hover:scale-105"
                 style={{
-                  backgroundColor: surface,
-                  border: `1px solid ${border}`,
+                  backgroundColor: "var(--surface-raised)",
+                  border: "1px solid var(--border)",
                 }}
               >
                 <div
@@ -210,10 +192,10 @@ export default function HomePage({
                 >
                   {cat === "AI-Era" ? "🤖" : cat === "HR" ? "👥" : cat === "Marketing" ? "📣" : cat === "Sales" ? "💰" : cat === "Product Management" ? "🚀" : cat === "Corporate Finance" ? "💼" : cat === "Leadership" ? "👑" : cat === "Negotiation" ? "🤝" : cat === "Communication" ? "💬" : "📋"}
                 </div>
-                <h3 className="font-semibold text-sm mb-1" style={{ color: text }}>
+                <h3 className="font-semibold text-sm mb-1" style={{ color: "var(--text)" }}>
                   {DOMAIN_LABELS[cat] || cat}
                 </h3>
-                <p className="text-xs" style={{ color: muted }}>
+                <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
                   {count} books
                 </p>
               </button>
@@ -223,12 +205,12 @@ export default function HomePage({
       </section>
 
       {/* Quick Start Pathways */}
-      <section style={{ backgroundColor: bg2 }}>
+      <section aria-labelledby="pathways-heading" style={{ backgroundColor: "var(--surface)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-2xl font-bold mb-2" style={{ color: text }}>
+          <h2 id="pathways-heading" className="text-2xl font-bold mb-2" style={{ color: "var(--text)" }}>
             🎯 Reading Pathways
           </h2>
-          <p className="text-sm mb-8" style={{ color: muted }}>
+          <p className="text-sm mb-8" style={{ color: "var(--text-secondary)" }}>
             Structured reading programs for different goals
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -263,20 +245,20 @@ export default function HomePage({
                 onClick={() => onNavigate("pathways")}
                 className="p-6 rounded-xl text-left transition-transform hover:scale-[1.02]"
                 style={{
-                  backgroundColor: surface,
-                  border: `1px solid ${border}`,
+                  backgroundColor: "var(--surface-raised)",
+                  border: "1px solid var(--border)",
                 }}
               >
                 <div className="flex items-start gap-4">
                   <span className="text-3xl">{pathway.icon}</span>
                   <div>
-                    <h3 className="font-bold mb-1" style={{ color: text }}>
+                    <h3 className="font-bold mb-1" style={{ color: "var(--text)" }}>
                       {pathway.name}
                     </h3>
-                    <p className="text-xs font-medium mb-2" style={{ color: "#4A9EFF" }}>
+                    <p className="text-xs font-medium mb-2" style={{ color: "var(--accent)" }}>
                       {pathway.duration}
                     </p>
-                    <p className="text-sm" style={{ color: muted }}>
+                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
                       {pathway.desc}
                     </p>
                   </div>
@@ -289,25 +271,25 @@ export default function HomePage({
 
       {/* Your Progress */}
       {completedCount > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <section aria-labelledby="progress-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div
             className="p-8 rounded-2xl text-center"
             style={{
-              backgroundColor: surface,
-              border: `1px solid ${border}`,
+              backgroundColor: "var(--surface-raised)",
+              border: "1px solid var(--border)",
             }}
           >
             <p className="text-4xl mb-3">📊</p>
-            <h3 className="text-xl font-bold mb-1" style={{ color: text }}>
+            <h3 id="progress-heading" className="text-xl font-bold mb-1" style={{ color: "var(--text)" }}>
               You&apos;ve completed {completedCount} book{completedCount !== 1 ? "s" : ""}!
             </h3>
-            <p className="text-sm mb-4" style={{ color: muted }}>
+            <p className="text-sm mb-4" style={{ color: "var(--text-secondary)" }}>
               Keep up the momentum — track your full progress
             </p>
             <button
               onClick={() => onNavigate("progress")}
               className="px-6 py-2.5 rounded-lg font-medium text-white"
-              style={{ backgroundColor: "#4A9EFF" }}
+              style={{ backgroundColor: "var(--accent)" }}
             >
               View My Progress
             </button>
@@ -322,32 +304,26 @@ function StatBox({
   number,
   label,
   sublabel,
-  isDark,
-  surface,
-  border,
 }: {
   number: number;
   label: string;
   sublabel: string;
-  isDark: boolean;
-  surface: string;
-  border: string;
 }) {
   return (
     <div
       className="p-4 rounded-xl text-center"
-      style={{ backgroundColor: surface, border: `1px solid ${border}` }}
+      style={{ backgroundColor: "var(--surface-raised)", border: "1px solid var(--border)" }}
     >
-      <p className="text-3xl font-extrabold" style={{ color: "#4A9EFF" }}>
+      <p className="text-3xl font-extrabold" style={{ color: "var(--accent)" }}>
         {number}
       </p>
       <p
         className="text-sm font-medium"
-        style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}
+        style={{ color: "var(--text)" }}
       >
         {label}
       </p>
-      <p className="text-xs" style={{ color: isDark ? "#71767B" : "#536471" }}>
+      <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
         {sublabel}
       </p>
     </div>
@@ -356,42 +332,43 @@ function StatBox({
 
 function MiniBookCard({
   book,
-  isDark,
   onClick,
 }: {
   book: Book;
-  isDark: boolean;
   onClick: () => void;
 }) {
   const domainColor = DOMAIN_COLORS[book.category] || "#4A9EFF";
   return (
-    <button
+    <article
       onClick={onClick}
-      className="text-left p-4 rounded-xl transition-all hover:scale-[1.02] hover:shadow-lg"
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } }}
+      className="text-left p-4 rounded-xl transition-all hover:scale-[1.02] hover:shadow-lg cursor-pointer"
+      role="button"
+      tabIndex={0}
       style={{
-        backgroundColor: isDark ? "#192734" : "#FFFFFF",
-        border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+        backgroundColor: "var(--surface-raised)",
+        border: "1px solid var(--border)",
       }}
     >
       <div className="h-1 rounded-full mb-3" style={{ backgroundColor: domainColor }} />
       <div className="flex items-center gap-2 mb-2">
         <span className="text-xs font-bold px-1.5 py-0.5 rounded"
-          style={{ backgroundColor: "#FFD70022", color: "#FFD700" }}>
+          style={{ backgroundColor: "#FFD70022", color: "var(--star)" }}>
           T{book.tier}
         </span>
-        <span className="text-xs" style={{ color: isDark ? "#71767B" : "#536471" }}>
+        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
           {CURRENCY_ICONS[book.currency]} {book.year}
         </span>
       </div>
       <h4
         className="font-bold text-sm leading-snug mb-1 line-clamp-2"
-        style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}
+        style={{ color: "var(--text)" }}
       >
         {book.title}
       </h4>
-      <p className="text-xs" style={{ color: isDark ? "#71767B" : "#536471" }}>
+      <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
         {book.authors.join(", ")}
       </p>
-    </button>
+    </article>
   );
 }

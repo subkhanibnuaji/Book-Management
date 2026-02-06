@@ -19,17 +19,17 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
   const currencyColor = CURRENCY_COLORS[book.currency];
 
   const statusColors: Record<string, string> = {
-    "Not Started": isDark ? "#71767B" : "#536471",
-    "In Progress": "#F39C12",
-    "Completed": "#2ECC71",
+    "Not Started": "var(--text-secondary)",
+    "In Progress": "var(--warning)",
+    "Completed": "var(--success)",
   };
 
   return (
-    <div
+    <article
       className="group relative rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl cursor-pointer"
       style={{
-        backgroundColor: isDark ? "#192734" : "#FFFFFF",
-        border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+        backgroundColor: "var(--surface-raised)",
+        border: "1px solid var(--border)",
       }}
       onClick={() => onSelect(book)}
       role="button"
@@ -74,7 +74,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
         {/* Title */}
         <h3
           className="font-bold text-lg leading-tight mb-1 line-clamp-2 group-hover:text-[#4A9EFF] transition-colors"
-          style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}
+          style={{ color: "var(--text)" }}
         >
           {book.title}
         </h3>
@@ -82,7 +82,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
         {/* Author */}
         <p
           className="text-sm mb-2"
-          style={{ color: isDark ? "#71767B" : "#536471" }}
+          style={{ color: "var(--text-secondary)" }}
         >
           {book.authors.join(", ")}
         </p>
@@ -90,7 +90,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
         {/* Meta */}
         <div
           className="flex items-center gap-2 text-xs mb-3"
-          style={{ color: isDark ? "#71767B" : "#536471" }}
+          style={{ color: "var(--text-secondary)" }}
         >
           <span>{book.year}{book.updatedYear ? `/${book.updatedYear}` : ""}</span>
           <span>·</span>
@@ -116,7 +116,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
           {book.domains.length > 3 && (
             <span
               className="px-2 py-0.5 rounded-md text-xs"
-              style={{ color: isDark ? "#71767B" : "#536471" }}
+              style={{ color: "var(--text-secondary)" }}
             >
               +{book.domains.length - 3}
             </span>
@@ -126,7 +126,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
         {/* Summary */}
         <p
           className="text-sm leading-relaxed line-clamp-2 mb-3"
-          style={{ color: isDark ? "#A0A8B0" : "#4A5568" }}
+          style={{ color: "var(--text-content)" }}
         >
           {book.content.summary}
         </p>
@@ -147,7 +147,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
             ))}
             <span
               className="text-xs ml-1"
-              style={{ color: isDark ? "#71767B" : "#536471" }}
+              style={{ color: "var(--text-secondary)" }}
             >
               Authority
             </span>
@@ -156,7 +156,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
           {book.ratings.goodreads && (
             <span
               className="text-xs"
-              style={{ color: isDark ? "#71767B" : "#536471" }}
+              style={{ color: "var(--text-secondary)" }}
             >
               GR: {book.ratings.goodreads}★
             </span>
@@ -165,7 +165,7 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
 
         {/* Quick action */}
         {onStatusChange && (
-          <div className="mt-3 pt-3" style={{ borderTop: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}` }}>
+          <div className="mt-3 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
             <select
               value={readingStatus || "Not Started"}
               onChange={(e) => {
@@ -175,9 +175,9 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
               onClick={(e) => e.stopPropagation()}
               className="w-full px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
               style={{
-                backgroundColor: isDark ? "#0F1419" : "#F7F9FA",
+                backgroundColor: "var(--surface)",
                 color: statusColors[readingStatus || "Not Started"],
-                border: `1px solid ${isDark ? "#2F3336" : "#EFF3F4"}`,
+                border: "1px solid var(--border)",
               }}
               aria-label={`Set reading status for ${book.title}`}
             >
@@ -188,6 +188,6 @@ export default function BookCard({ book, isDark, readingStatus, onSelect, onStat
           </div>
         )}
       </div>
-    </div>
+    </article>
   );
 }

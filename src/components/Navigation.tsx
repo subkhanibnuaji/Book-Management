@@ -44,8 +44,8 @@ export default function Navigation({
   return (
     <header className="sticky top-0 z-50 glass border-b transition-colors duration-300"
       style={{
-        backgroundColor: isDark ? "rgba(15, 20, 25, 0.85)" : "rgba(255, 255, 255, 0.85)",
-        borderColor: isDark ? "#2F3336" : "#EFF3F4",
+        backgroundColor: "var(--nav-bg)",
+        borderColor: "var(--border)",
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,17 +54,18 @@ export default function Navigation({
           <button
             onClick={() => handleNav("home")}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            aria-label="Go to homepage"
           >
             <span className="text-2xl">📚</span>
             <span className="font-bold text-lg hidden sm:inline"
-              style={{ color: isDark ? "#E7E9EA" : "#0F1419" }}
+              style={{ color: "var(--text)" }}
             >
               Ibnu&apos;s Library
             </span>
           </button>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
             {navItems.map((item) => (
               <button
                 key={item.key}
@@ -76,13 +77,11 @@ export default function Navigation({
                 }`}
                 style={{
                   backgroundColor:
-                    currentPage === item.key ? "#4A9EFF" : "transparent",
+                    currentPage === item.key ? "var(--accent)" : "transparent",
                   color:
                     currentPage === item.key
                       ? "#FFFFFF"
-                      : isDark
-                      ? "#E7E9EA"
-                      : "#536471",
+                      : "var(--text-secondary)",
                 }}
               >
                 <span className="mr-1.5">{item.icon}</span>
@@ -97,8 +96,8 @@ export default function Navigation({
               onClick={onToggleTheme}
               className="p-2 rounded-lg transition-colors duration-200 hover:opacity-80"
               style={{
-                backgroundColor: isDark ? "#192734" : "#F7F9FA",
-                color: isDark ? "#E7E9EA" : "#0F1419",
+                backgroundColor: "var(--control-bg)",
+                color: "var(--text)",
               }}
               aria-label="Toggle theme"
             >
@@ -110,8 +109,8 @@ export default function Navigation({
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden p-2 rounded-lg transition-colors"
               style={{
-                backgroundColor: isDark ? "#192734" : "#F7F9FA",
-                color: isDark ? "#E7E9EA" : "#0F1419",
+                backgroundColor: "var(--control-bg)",
+                color: "var(--text)",
               }}
               aria-label="Toggle menu"
             >
@@ -126,11 +125,11 @@ export default function Navigation({
         <div
           className="md:hidden border-t transition-colors duration-300"
           style={{
-            backgroundColor: isDark ? "#0F1419" : "#FFFFFF",
-            borderColor: isDark ? "#2F3336" : "#EFF3F4",
+            backgroundColor: "var(--bg)",
+            borderColor: "var(--border)",
           }}
         >
-          <nav className="px-4 py-2 space-y-1">
+          <nav className="px-4 py-2 space-y-1" aria-label="Mobile navigation">
             {navItems.map((item) => (
               <button
                 key={item.key}
@@ -139,16 +138,12 @@ export default function Navigation({
                 style={{
                   backgroundColor:
                     currentPage === item.key
-                      ? isDark
-                        ? "#192734"
-                        : "#E3F2FD"
+                      ? "var(--nav-active-bg)"
                       : "transparent",
                   color:
                     currentPage === item.key
-                      ? "#4A9EFF"
-                      : isDark
-                      ? "#E7E9EA"
-                      : "#536471",
+                      ? "var(--accent)"
+                      : "var(--text-secondary)",
                 }}
               >
                 <span>{item.icon}</span>
